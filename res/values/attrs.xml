@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TintedImageView">
+        <attr name="stateListFilter" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="TintedProgressBar">
+        <attr name="tint" format="color|reference" />
+    </declare-styleable>
+</resources>

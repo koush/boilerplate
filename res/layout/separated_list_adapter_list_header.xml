@@ -1,0 +1,14 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingRight="@dimen/boilerplate_list_item_layout_horizontalMargin"
+    android:paddingLeft="@dimen/boilerplate_list_item_layout_horizontalMargin">
+
+    <TextView
+        android:gravity="center_vertical"
+        android:id="@android:id/text1"
+        style="@style/TextAppearance.AppCompat.Body2"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp" />
+
+</LinearLayout>

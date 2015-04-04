@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <FrameLayout
+            android:id="@+id/icon_list_drawer_activity_listview_header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/icon_list_drawer_activity_backdrop_height" />
+</LinearLayout>
