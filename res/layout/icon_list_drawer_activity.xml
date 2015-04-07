@@ -14,55 +14,10 @@
 
 
         <FrameLayout
-                android:id="@+id/toolbar_content_container"
+                android:clipChildren="false"
+                android:id="@+id/main_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <FrameLayout
-                    android:id="@+id/backdrop_container"
-                    android:layout_width="match_parent"
-                    android:minHeight="?attr/actionBarSize"
-                    android:layout_height="@dimen/icon_list_drawer_activity_backdrop_height" />
-
-            <LinearLayout
-                    android:clipChildren="false"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                <FrameLayout
-                        android:layout_marginTop="@dimen/icon_list_drawer_activity_statusbar_height"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize" />
-
-                <FrameLayout
-                        android:clipChildren="false"
-                        android:id="@+id/main_content"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                    android:id="@+id/toolbar_container"
-                    android:background="?attr/colorPrimary"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/icon_list_drawer_activity_statusbar_height" />
-
-                <android.support.v7.widget.Toolbar
-                        android:id="@+id/toolbar"
-                        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        />
-            </LinearLayout>
-        </FrameLayout>
-
+                android:layout_height="match_parent"/>
 
         <FrameLayout
                 style="@style/IconListDrawerLayoutDrawerStyle"
