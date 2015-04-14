@@ -1,5 +1,7 @@
 package com.koushikdutta.boilerplate;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -75,22 +77,39 @@ public abstract class IconListDrawerActivity extends ActionBarActivity {
         getDrawer()
         .setDrawerListener(drawerToggle = new ActionBarDrawerToggle(this, getDrawer(), getDrawerOpenString(), getDrawerCloseString()) {
             DecelerateInterpolator interpolator = new DecelerateInterpolator();
+            ArgbEvaluator evaluator = new ArgbEvaluator();
+            boolean hasOpened;
+            int originalStatusBarColor;
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                super.onDrawerStateChanged(newState);
+                if (newState == DrawerLayout.STATE_DRAGGING && !hasOpened) {
+                    hasOpened = true;
+                    originalStatusBarColor = WindowChromeUtils.getStatusBarColor(getWindow());
+                }
+            }
 
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
                 // this check exists in case we want to animate the drawer icon into a back indicator
                 // and don't erroneously translate this stuff.
-                if (!getDrawer().isDrawerOpen(Gravity.LEFT))
+                if (!getDrawer().isDrawerVisible(Gravity.LEFT))
                     return;
                 View content = getDrawer().getChildAt(0);
                 View drawer = getDrawer().getChildAt(1);
                 content.setTranslationX(Math.min(content.getMeasuredWidth(), drawer.getMeasuredWidth()) / 3 * interpolator.getInterpolation(slideOffset));
+                if (hasOpened)
+                    WindowChromeUtils.setStatusBarColor(getWindow(), (int)evaluator.evaluate(slideOffset, originalStatusBarColor, 0x4D000000));
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+                if (hasOpened) {
+                    WindowChromeUtils.setStatusBarColor(getWindow(), originalStatusBarColor);
+                }
                 if (isFinishing())
                     return;
                 IconListDrawerActivity.this.onDrawerClosed();

@@ -13,6 +13,10 @@ public class TintHelper {
         return getStyledColor(context, android.R.attr.textColorPrimary);
     }
 
+    public static int getColorPrimaryDark(Context context) {
+        return getStyledColor(context, R.attr.colorPrimaryDark);
+    }
+
     public static int getColorPrimary(Context context) {
         return getStyledColor(context, R.attr.colorPrimary);
     }
