@@ -1,7 +1,6 @@
 package com.koushikdutta.boilerplate;
 
 import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.res.Configuration;
 import android.graphics.Color;

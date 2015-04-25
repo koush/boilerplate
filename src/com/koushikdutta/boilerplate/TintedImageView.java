@@ -7,6 +7,8 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -14,8 +16,13 @@ import android.widget.ImageView;
  * Created by koush on 3/30/15.
  */
 public class TintedImageView extends ImageView {
-    ColorStateList textColor;
-    boolean stateListFilter;
+    public enum StateListFilter {
+        None,
+        Normal,
+        Inverse
+    }
+
+    int stateListFilter;
 
     public TintedImageView(Context context) {
         super(context);
@@ -33,48 +40,27 @@ public class TintedImageView extends ImageView {
     }
 
     private void init(AttributeSet attrs) {
-        stateListFilter = attrs != null && attrs.getAttributeBooleanValue("http://schemas.android.com/apk/res-auto", "stateListFilter", false);
-        textColor = TintHelper.getTintColorStateList(getContext());
+        stateListFilter = attrs != null ? attrs.getAttributeIntValue("http://schemas.android.com/apk/res-auto", "stateListFilter", 0) : 0;
+        setImageDrawable(original);
     }
 
+    Drawable original;
     @Override
-    protected void drawableStateChanged() {
-        super.drawableStateChanged();
-        update();
+    public void setImageDrawable(Drawable drawable) {
+        original = drawable;
+        if (stateListFilter != 0) {
+            if (stateListFilter == 1)
+                drawable = TintHelper.getStateListDrawable(getContext(), drawable, TintHelper.getTextColorPrimary(getContext()));
+            else
+                drawable = TintHelper.getStateListDrawable(getContext(), drawable, TintHelper.getTextColorPrimaryInverse(getContext()));
+        }
+        super.setImageDrawable(drawable);
     }
 
-    //To generate negative image
-    private static final  float[] colorMatrix_Negative = {
-    -1.0f, 0, 0, 0, 255, //red
-    0, -1.0f, 0, 0, 255, //green
-    0, 0, -1.0f, 0, 255, //blue
-    0, 0, 0, 1.0f, 0 //alpha
-    };
-
-    private static final ColorMatrix colorMatrixNegative = new ColorMatrix(colorMatrix_Negative);
-
-    void update() {
-        if (stateListFilter) {
-            int color = textColor.getColorForState(getDrawableState(), Color.TRANSPARENT);
-
-            ColorMatrix s = new ColorMatrix();
-            s.setScale(1 - Color.red(color) / 255f, 1 - Color.green(color) / 255f, 1 - Color.blue(color) / 255f, 1);
-            s.preConcat(colorMatrixNegative);
-            s.postConcat(colorMatrixNegative);
-
-            ColorMatrixColorFilter filter = new ColorMatrixColorFilter(s);
-            setColorFilter(filter);
-        }
-        else {
-            setColorFilter(null);
-        }
-        invalidate();
-    }
-
-    public void setStateListFilter(boolean stateListFilter) {
-        if (this.stateListFilter == stateListFilter)
+    public void setStateListFilter(StateListFilter stateListFilter) {
+        if (this.stateListFilter == stateListFilter.ordinal())
             return;
-        this.stateListFilter = stateListFilter;
-        update();
+        this.stateListFilter = stateListFilter.ordinal();
+        setImageDrawable(original);
     }
 }

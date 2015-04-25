@@ -61,7 +61,7 @@ public class IconListItem {
     protected void bindView(View v) {
         TintedImageView tiv = ((TintedImageView)v.findViewById(R.id.icon_list_fragment_icon));
         tiv.setImageDrawable(icon);
-        tiv.setStateListFilter(selectableIcon);
+        tiv.setStateListFilter(TintedImageView.StateListFilter.Normal);
         ((TextView)v.findViewById(R.id.icon_list_fragment_title)).setText(title);
     }
 }

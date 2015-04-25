@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="TintedImageView">
-        <attr name="stateListFilter" format="boolean" />
+        <attr name="stateListFilter" format="enum" >
+            <enum name="none" value="0" />
+            <enum name="normal" value="1" />
+            <enum name="inverse" value="2" />
+        </attr>
     </declare-styleable>
     <declare-styleable name="TintedProgressBar">
         <attr name="tint" format="color|reference" />

@@ -96,7 +96,7 @@ public class ScrollingToolbarLayout extends FrameLayout {
     }
 
     boolean scrollOffEnabled;
-    public void enableToolbarScrollOff(final ListView listView, final AbsListView.OnScrollListener scrollListener) {
+    public void enableToolbarScrollOff(final ListView listView, final HeaderAbsListView.OnScrollListener scrollListener) {
         enableToolbarScrollOff(new HeaderAbsListView() {
             @Override
             public void addHeaderView(View view) {
@@ -104,20 +104,30 @@ public class ScrollingToolbarLayout extends FrameLayout {
             }
 
             @Override
-            public void setOnScrollListener(AbsListView.OnScrollListener l) {
-                listView.setOnScrollListener(l);
+            public void setOnScrollListener(final HeaderAbsListView.OnScrollListener l) {
+                listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(AbsListView view, int scrollState) {
+                        l.onScrollStateChanged(view, scrollState);
+                    }
+
+                    @Override
+                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                        l.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+                    }
+                });
             }
         }, scrollListener);
     }
 
-    public void enableToolbarScrollOff(final AbsListView listView, AbsListView.OnScrollListener scrollListener) {
+    public void enableToolbarScrollOff(final AbsListView listView, HeaderAbsListView.OnScrollListener scrollListener) {
         if (listView instanceof ListView)
             enableToolbarScrollOff((ListView)listView, scrollListener);
         else
             enableToolbarScrollOff((HeaderAbsListView)listView, scrollListener);
     }
 
-    public void enableToolbarScrollOff(HeaderAbsListView listView, final AbsListView.OnScrollListener scrollListener) {
+    public void enableToolbarScrollOff(HeaderAbsListView listView, final HeaderAbsListView.OnScrollListener scrollListener) {
         scrollOffEnabled = true;
 
         int extra;
@@ -133,15 +143,15 @@ public class ScrollingToolbarLayout extends FrameLayout {
         frameLayout.setLayoutParams(lp);
         listView.addHeaderView(frameLayout);
 
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        listView.setOnScrollListener(new HeaderAbsListView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            public void onScrollStateChanged(ViewGroup view, int scrollState) {
                 if (scrollListener != null)
                     scrollListener.onScrollStateChanged(view, scrollState);
             }
 
             @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            public void onScroll(ViewGroup absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (scrollListener != null)
                     scrollListener.onScroll(absListView, firstVisibleItem, visibleItemCount, totalItemCount);
 
