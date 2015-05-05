@@ -8,6 +8,8 @@ import android.view.View;
 
 import com.koushikdutta.boilerplate.HeaderAbsListView;
 
+import java.util.Hashtable;
+
 /**
  * Created by koush on 4/19/15.
  */
@@ -27,20 +29,32 @@ public class GridRecyclerView extends RecyclerView implements HeaderAbsListView 
         init(context, attrs);
     }
 
+    public interface SpanningViewHolder {
+        int getSpanSize(int spanCount);
+    }
+
     public void setNumColumns(int numColumns) {
         setNumColumns(getContext(), numColumns);
     }
 
+    Hashtable<Integer, Integer> typeToSpan = new Hashtable<Integer, Integer>();
     private void setNumColumns(Context context, int numColumns) {
         if (gridLayoutManager == null) {
             gridLayoutManager = new GridLayoutManager(context, numColumns);
             gridLayoutManager.setSpanSizeLookup(spanSizeLookup = new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    if (position < headerViewAdapter.getItemCount())
-                        return gridLayoutManager.getSpanCount();
-                    if (adapterWrapper.isEmptyView(position))
-                        return gridLayoutManager.getSpanCount();
+                    int viewType = adapterWrapper.getItemViewType(position);
+                    Integer span = typeToSpan.get(viewType);
+                    if (span != null)
+                        return span;
+                    ViewHolder vh = adapterWrapper.createViewHolder(GridRecyclerView.this, viewType);
+                    int foundSpan;
+                    if (vh instanceof SpanningViewHolder)
+                        foundSpan = ((SpanningViewHolder)vh).getSpanSize(gridLayoutManager.getSpanCount());
+                    else
+                        foundSpan = 1;
+                    typeToSpan.put(viewType, foundSpan);
                     return 1;
                 }
             });
@@ -49,6 +63,7 @@ public class GridRecyclerView extends RecyclerView implements HeaderAbsListView 
         else {
             gridLayoutManager.setSpanCount(numColumns);
         }
+        typeToSpan.clear();
         spanSizeLookup.invalidateSpanIndexCache();
         requestLayout();
     }

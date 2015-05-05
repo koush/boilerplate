@@ -10,8 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -23,7 +23,7 @@ import android.view.animation.DecelerateInterpolator;
 /**
  * Created by koush on 3/30/15.
  */
-public abstract class IconListDrawerActivity extends ActionBarActivity {
+public abstract class IconListDrawerActivity extends AppCompatActivity {
     ActionBarDrawerToggle drawerToggle;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -75,7 +75,7 @@ public abstract class IconListDrawerActivity extends ActionBarActivity {
     private void resetDrawerToggle() {
         getDrawer()
         .setDrawerListener(drawerToggle = new ActionBarDrawerToggle(this, getDrawer(), getDrawerOpenString(), getDrawerCloseString()) {
-            DecelerateInterpolator interpolator = new DecelerateInterpolator();
+//            DecelerateInterpolator interpolator = new DecelerateInterpolator();
             ArgbEvaluator evaluator = new ArgbEvaluator();
             boolean hasOpened;
             int originalStatusBarColor;
@@ -96,9 +96,9 @@ public abstract class IconListDrawerActivity extends ActionBarActivity {
                 // and don't erroneously translate this stuff.
                 if (!getDrawer().isDrawerVisible(Gravity.LEFT))
                     return;
-                View content = getDrawer().getChildAt(0);
-                View drawer = getDrawer().getChildAt(1);
-                content.setTranslationX(Math.min(content.getMeasuredWidth(), drawer.getMeasuredWidth()) / 3 * interpolator.getInterpolation(slideOffset));
+//                View content = getDrawer().getChildAt(0);
+//                View drawer = getDrawer().getChildAt(1);
+//                content.setTranslationX(Math.min(content.getMeasuredWidth(), drawer.getMeasuredWidth()) / 3 * interpolator.getInterpolation(slideOffset));
                 if (hasOpened)
                     WindowChromeUtils.setStatusBarColor(getWindow(), (int)evaluator.evaluate(slideOffset, originalStatusBarColor, 0x4D000000));
             }

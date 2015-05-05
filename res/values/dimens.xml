@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="icon_list_drawer_activity_statusbar_height">0dp</dimen>
-    <dimen name="icon_list_drawer_activity_backdrop_height">360dp</dimen>
+    <dimen name="icon_list_drawer_activity_backdrop_height">229dp</dimen>
     <dimen name="boilerplate_list_item_layout_horizontalMargin">16dp</dimen>
     <dimen name="boilerplate_list_item_second_column_horizontalMargin">72dp</dimen>
 </resources>

@@ -188,7 +188,7 @@ public class AdapterWrapper extends RecyclerView.Adapter {
         throw new RuntimeException("invalid position");
     }
 
-    private static class HeaderViewHolder extends RecyclerView.ViewHolder {
+    private static class HeaderViewHolder extends RecyclerView.ViewHolder implements GridRecyclerView.SpanningViewHolder {
         TextView textView;
         public HeaderViewHolder(View itemView) {
             super(itemView);
@@ -198,11 +198,21 @@ public class AdapterWrapper extends RecyclerView.Adapter {
         public void bind(WrappedAdapter info) {
             textView.setText(info.sectionHeader);
         }
+
+        @Override
+        public int getSpanSize(int spanCount) {
+            return spanCount;
+        }
     }
 
-    private static class EmptyViewHolder extends RecyclerView.ViewHolder {
+    private static class EmptyViewHolder extends RecyclerView.ViewHolder implements GridRecyclerView.SpanningViewHolder {
         public EmptyViewHolder(View itemView) {
             super(itemView);
+        }
+
+        @Override
+        public int getSpanSize(int spanCount) {
+            return spanCount;
         }
     }
 
@@ -259,6 +269,10 @@ public class AdapterWrapper extends RecyclerView.Adapter {
 
     public boolean isEmptyView(int position) {
         return getItemViewType(position) % 2 == 0;
+    }
+
+    public boolean isHeaderView(int position) {
+        return getItemViewType(position) == 0;
     }
 
     @Override

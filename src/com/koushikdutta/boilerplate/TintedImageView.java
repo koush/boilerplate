@@ -57,6 +57,11 @@ public class TintedImageView extends ImageView {
         super.setImageDrawable(drawable);
     }
 
+    @Override
+    public void setImageResource(int resId) {
+        setImageDrawable(getContext().getResources().getDrawable(resId));
+    }
+
     public void setStateListFilter(StateListFilter stateListFilter) {
         if (this.stateListFilter == stateListFilter.ordinal())
             return;

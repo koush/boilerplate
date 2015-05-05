@@ -26,9 +26,14 @@ public class HeaderViewAdapter extends RecyclerView.Adapter<HeaderViewAdapter.Vi
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements GridRecyclerView.SpanningViewHolder {
         public ViewHolder(View itemView) {
             super(itemView);
+        }
+
+        @Override
+        public int getSpanSize(int spanCount) {
+            return spanCount;
         }
     }
 
