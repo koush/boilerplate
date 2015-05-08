@@ -55,7 +55,7 @@ public class GridRecyclerView extends RecyclerView implements HeaderAbsListView 
                     else
                         foundSpan = 1;
                     typeToSpan.put(viewType, foundSpan);
-                    return 1;
+                    return foundSpan;
                 }
             });
             setLayoutManager(gridLayoutManager);
@@ -71,7 +71,7 @@ public class GridRecyclerView extends RecyclerView implements HeaderAbsListView 
     void updateEmptyState() {
         if (emptyView == null)
             return;
-        if (adapterWrapper.getItemCount() == 0) {
+        if (adapterWrapper.getItemCount() - headerViewAdapter.getItemCount() == 0) {
             emptyView.setVisibility(View.VISIBLE);
             setVisibility(View.GONE);
         }
@@ -99,13 +99,18 @@ public class GridRecyclerView extends RecyclerView implements HeaderAbsListView 
     AdapterWrapper adapterWrapper = new AdapterWrapper();
     HeaderViewAdapter headerViewAdapter = new HeaderViewAdapter();
     GridLayoutManager.SpanSizeLookup spanSizeLookup;
+    AdapterWrapper.WrappedAdapter wrappedAdapter;
 
     @Override
     public void setAdapter(Adapter adapter) {
         adapterWrapper.remove(this.adapter);
         this.adapter = adapter;
-        adapterWrapper.wrapAdapter(adapter);
+        wrappedAdapter = adapterWrapper.wrapAdapter(adapter);
         super.setAdapter(adapterWrapper);
+    }
+
+    public AdapterWrapper.WrappedAdapter getWrappedAdapter() {
+        return wrappedAdapter;
     }
 
     @Override

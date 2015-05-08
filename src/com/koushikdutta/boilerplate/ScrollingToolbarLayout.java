@@ -7,6 +7,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,7 +97,7 @@ public class ScrollingToolbarLayout extends FrameLayout {
     }
 
     boolean scrollOffEnabled;
-    public void enableToolbarScrollOff(final ListView listView, final HeaderAbsListView.OnScrollListener scrollListener) {
+    public void enableToolbarScrollOff(final ListView listView, final HeaderAbsListView.OnScrollListener scrollListener, Fragment fragment) {
         enableToolbarScrollOff(new HeaderAbsListView() {
             @Override
             public void addHeaderView(View view) {
@@ -117,25 +118,31 @@ public class ScrollingToolbarLayout extends FrameLayout {
                     }
                 });
             }
-        }, scrollListener);
+        }, scrollListener, fragment);
     }
 
-    public void enableToolbarScrollOff(final AbsListView listView, HeaderAbsListView.OnScrollListener scrollListener) {
+    public void enableToolbarScrollOff(final AbsListView listView, HeaderAbsListView.OnScrollListener scrollListener, Fragment fragment) {
         if (listView instanceof ListView)
-            enableToolbarScrollOff((ListView)listView, scrollListener);
+            enableToolbarScrollOff((ListView)listView, scrollListener, fragment);
         else
-            enableToolbarScrollOff((HeaderAbsListView)listView, scrollListener);
+            enableToolbarScrollOff((HeaderAbsListView)listView, scrollListener, fragment);
     }
 
-    public void enableToolbarScrollOff(HeaderAbsListView listView, final HeaderAbsListView.OnScrollListener scrollListener) {
+    public void enableToolbarScrollOff(HeaderAbsListView listView, final HeaderAbsListView.OnScrollListener scrollListener, final Fragment fragment) {
         scrollOffEnabled = true;
 
         int extra;
-        if (getChildCount() == 3) {
-            extra = getChildAt(0).getLayoutParams().height;
+        View paddingView;
+        if (getChildCount() == 3)
+            paddingView = getChildAt(0);
+        else
+            paddingView = getChildAt(getChildCount() -1);
+        if (paddingView.getLayoutParams().height > 0) {
+            extra = paddingView.getLayoutParams().height;
         }
         else {
-            extra = getChildAt(getChildCount() - 1).getLayoutParams().height;
+            paddingView.measure(MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE, MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE, MeasureSpec.AT_MOST));
+            extra = paddingView.getMeasuredHeight();
         }
 
         AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, extra);
@@ -155,9 +162,11 @@ public class ScrollingToolbarLayout extends FrameLayout {
                 if (scrollListener != null)
                     scrollListener.onScroll(absListView, firstVisibleItem, visibleItemCount, totalItemCount);
 
-                if (absListView.getChildCount() < 1) {
+                if (absListView.getChildCount() < 1)
                     return;
-                }
+
+                if (fragment != null && !fragment.getUserVisibleHint())
+                    return;
 
                 final View firstView = absListView.getChildAt(0);
 
@@ -183,7 +192,7 @@ public class ScrollingToolbarLayout extends FrameLayout {
                     lp.height = newBackdropHeight;
                     // another option is to use y translation to not do parallax
                     backdrop.setLayoutParams(lp);
-                    if (newBackdropHeight / (float)backdropHeight < .5f) {
+                    if (newBackdropHeight / (float) backdropHeight < .5f) {
                         toolbarFadeToPrimary();
                     } else {
                         toolbarFadeToTranslucent();
@@ -211,6 +220,8 @@ public class ScrollingToolbarLayout extends FrameLayout {
                     backdrop.setTranslationY(-toolbarHeight);
             }
         });
+        if (getChildCount() == 3)
+            toolbarFadeToTranslucent();
     }
 
     boolean isPrimary = true;
