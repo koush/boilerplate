@@ -1,5 +1,6 @@
 package com.koushikdutta.boilerplate;
 
+import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -11,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -57,7 +59,7 @@ public class ScrollingToolbarLayout extends FrameLayout {
         if (getChildCount() > 3)
             throw new RuntimeException(getClass().getSimpleName() + " ay only contain a maxmimum of 3 Views. Backdrop, Content, and Toolbar, in that order.");
 
-        toolbar = getChildAt(getChildCount() - 1);
+        View toolbar = getChildAt(getChildCount() - 1);
 
         int contentIndex = getChildCount() == 3 ? 1 : 0;
         View content = getChildAt(contentIndex);
@@ -68,7 +70,6 @@ public class ScrollingToolbarLayout extends FrameLayout {
         content.measure(widthMeasureSpec, newHeightMeasureSpec);
     }
 
-    View toolbar;
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         if (getChildCount() == 0)
@@ -77,7 +78,7 @@ public class ScrollingToolbarLayout extends FrameLayout {
         if (getChildCount() > 3)
             throw new RuntimeException(getClass().getSimpleName() + " ay only contain a maxmimum of 3 Views. Backdrop, Content, and Toolbar, in that order.");
 
-        toolbar = getChildAt(getChildCount() - 1);
+        View toolbar = getChildAt(getChildCount() - 1);
         toolbar.layout(l, t, r, t + toolbar.getMeasuredHeight());
 
         int newt;
@@ -152,9 +153,15 @@ public class ScrollingToolbarLayout extends FrameLayout {
 
         listView.setOnScrollListener(new HeaderAbsListView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(ViewGroup view, int scrollState) {
+            public void onScrollStateChanged(ViewGroup absListView, int scrollState) {
                 if (scrollListener != null)
-                    scrollListener.onScrollStateChanged(view, scrollState);
+                    scrollListener.onScrollStateChanged(absListView, scrollState);
+                if (absListView.getChildCount() < 1)
+                    return;
+                final View toolbarContainer = getChildAt(getChildCount() - 1);
+                if (toolbarContainer.getTranslationY() <= -toolbarContainer.getHeight() || (existingToolbarYAnimation != null && existingToolbarYEnd <= toolbarContainer.getHeight()))
+                    return;
+                toolbarScrollIn();
             }
 
             @Override
@@ -168,6 +175,7 @@ public class ScrollingToolbarLayout extends FrameLayout {
                 if (fragment != null && !fragment.getUserVisibleHint())
                     return;
 
+                cancelToolbarScroll();
                 final View firstView = absListView.getChildAt(0);
 
                 final View toolbarContainer = getChildAt(getChildCount() - 1);
@@ -204,18 +212,19 @@ public class ScrollingToolbarLayout extends FrameLayout {
                     // if there's less than toolbar height left, start scrolling off.
                     if (remainder < toolbarHeight) {
                         remainder = toolbarHeight - remainder;
-                        toolbarContainer.setTranslationY(-remainder);
+                        if (existingToolbarYAnimation == null)
+                            toolbarContainer.setTranslationY(-remainder);
                         if (backdrop != null)
                             backdrop.setTranslationY(-remainder);
                     } else {
-                        toolbarContainer.setTranslationY(0);
+                        toolbarScrollIn();
                         if (backdrop != null)
                             backdrop.setTranslationY(0);
                     }
                     return;
                 }
 
-                toolbarContainer.setTranslationY(-toolbarHeight);
+                toolbarScrollOut();
                 if (backdrop != null)
                     backdrop.setTranslationY(-toolbarHeight);
             }
@@ -229,8 +238,54 @@ public class ScrollingToolbarLayout extends FrameLayout {
     int colorPrimaryDark;
     int colorFaded;
     int currentStatusBarColor;
-    ObjectAnimator existingToolbarAnimation;
+    ObjectAnimator existingToolbarColorAnimation;
     ValueAnimator existingStatusBarAnimation;
+    ViewPropertyAnimator existingToolbarYAnimation;
+    float existingToolbarYEnd;
+
+    void toolbarScrollOut() {
+        final View toolbarContainer = getChildAt(getChildCount() - 1);
+        toolbarScrollTo(-toolbarContainer.getHeight());
+    }
+
+    void toolbarScrollIn() {
+        toolbarScrollTo(0);
+    }
+
+    void cancelToolbarScroll() {
+        if (existingToolbarYAnimation != null) {
+            existingToolbarYAnimation.cancel();
+            existingStatusBarAnimation = null;
+        }
+    }
+
+    void toolbarScrollTo(int yTrans) {
+        cancelToolbarScroll();
+        final View toolbarContainer = getChildAt(getChildCount() - 1);
+        if (toolbarContainer.getTranslationY() == yTrans)
+            return;
+        existingToolbarYEnd = yTrans;
+        existingToolbarYAnimation = toolbarContainer.animate().translationY(yTrans);
+        existingToolbarYAnimation.setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                existingToolbarYAnimation = null;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+        existingToolbarYAnimation.start();
+    }
 
     void toolbarFadeToPrimary() {
         if (isPrimary)
@@ -264,13 +319,13 @@ public class ScrollingToolbarLayout extends FrameLayout {
     }
 
     void toolbarFadeToColor(int color) {
-        if (existingToolbarAnimation != null)
-            existingToolbarAnimation.cancel();
+        if (existingToolbarColorAnimation != null)
+            existingToolbarColorAnimation.cancel();
         View toolbarContainer = getChildAt(getChildCount() - 1);
         int existingColor = ((ColorDrawable)toolbarContainer.getBackground()).getColor();
-        existingToolbarAnimation = ObjectAnimator.ofInt(toolbarContainer, "backgroundColor", existingColor, color);
-        existingToolbarAnimation.setEvaluator(new ArgbEvaluator());
-        existingToolbarAnimation.setDuration(500);
-        existingToolbarAnimation.start();
+        existingToolbarColorAnimation = ObjectAnimator.ofInt(toolbarContainer, "backgroundColor", existingColor, color);
+        existingToolbarColorAnimation.setEvaluator(new ArgbEvaluator());
+        existingToolbarColorAnimation.setDuration(500);
+        existingToolbarColorAnimation.start();
     }
 }
