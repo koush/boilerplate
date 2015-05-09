@@ -4,4 +4,5 @@
     <dimen name="icon_list_drawer_activity_backdrop_height">229dp</dimen>
     <dimen name="boilerplate_list_item_layout_horizontalMargin">16dp</dimen>
     <dimen name="boilerplate_list_item_second_column_horizontalMargin">72dp</dimen>
+    <dimen name="boilerplate_list_item_checkbox_horizontalMargin">16dp</dimen>
 </resources>

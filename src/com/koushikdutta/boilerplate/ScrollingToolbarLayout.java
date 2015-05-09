@@ -243,12 +243,12 @@ public class ScrollingToolbarLayout extends FrameLayout {
     ViewPropertyAnimator existingToolbarYAnimation;
     float existingToolbarYEnd;
 
-    void toolbarScrollOut() {
+    public void toolbarScrollOut() {
         final View toolbarContainer = getChildAt(getChildCount() - 1);
         toolbarScrollTo(-toolbarContainer.getHeight());
     }
 
-    void toolbarScrollIn() {
+    public void toolbarScrollIn() {
         toolbarScrollTo(0);
     }
 
@@ -260,10 +260,10 @@ public class ScrollingToolbarLayout extends FrameLayout {
     }
 
     void toolbarScrollTo(int yTrans) {
-        cancelToolbarScroll();
         final View toolbarContainer = getChildAt(getChildCount() - 1);
-        if (toolbarContainer.getTranslationY() == yTrans)
+        if (toolbarContainer.getTranslationY() == yTrans || (existingToolbarYAnimation != null && existingToolbarYEnd == yTrans))
             return;
+        cancelToolbarScroll();
         existingToolbarYEnd = yTrans;
         existingToolbarYAnimation = toolbarContainer.animate().translationY(yTrans);
         existingToolbarYAnimation.setListener(new Animator.AnimatorListener() {

@@ -18,12 +18,11 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.DecelerateInterpolator;
 
 /**
  * Created by koush on 3/30/15.
  */
-public abstract class IconListDrawerActivity extends AppCompatActivity {
+public abstract class DrawerActivity extends AppCompatActivity {
     ActionBarDrawerToggle drawerToggle;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -49,7 +48,7 @@ public abstract class IconListDrawerActivity extends AppCompatActivity {
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
             goTranslucentStatusBar();
 
-        setContentView(R.layout.icon_list_drawer_activity);
+        setContentView(R.layout.drawer_activity);
 
         if (savedInstanceState == null) {
             Fragment drawer = createDrawerFragment();
@@ -111,7 +110,7 @@ public abstract class IconListDrawerActivity extends AppCompatActivity {
                 }
                 if (isFinishing())
                     return;
-                IconListDrawerActivity.this.onDrawerClosed();
+                DrawerActivity.this.onDrawerClosed();
             }
         });
         drawerToggle.syncState();
