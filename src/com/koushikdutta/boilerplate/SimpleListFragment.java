@@ -8,21 +8,23 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.koushikdutta.boilerplate.recyclerview.GridRecyclerView;
+
 /**
  * Created by koush on 3/29/15.
  */
-public abstract class IconListFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
-    IconListFragmentAdapter adapter;
+public class SimpleListFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+    SimpleListFragmentAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new IconListFragmentAdapter(getActivity());
+        adapter = new SimpleListFragmentAdapter(this);
     }
 
-    public static ListView getIconListFragmentListView(View view) {
-        return (ListView)view.findViewById(android.R.id.list);
+    public static GridRecyclerView getIconListFragmentListView(View view) {
+        return (GridRecyclerView)view.findViewById(android.R.id.list);
     }
 
     public static ViewGroup getIconListViewContainer(View view) {
@@ -32,18 +34,13 @@ public abstract class IconListFragment extends Fragment implements AdapterView.O
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ListView lv = getIconListFragmentListView(view);
+        GridRecyclerView lv = getIconListFragmentListView(view);
         lv.setAdapter(adapter);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View ret = inflater.inflate(R.layout.icon_list_fragment, null);
-
-        ListView lv = getIconListFragmentListView(ret);
-        lv.setOnItemClickListener(this);
-        lv.setOnItemLongClickListener(this);
-        return ret;
+        return inflater.inflate(R.layout.icon_list_fragment, null);
     }
 
     @Override
@@ -62,27 +59,31 @@ public abstract class IconListFragment extends Fragment implements AdapterView.O
         return adapter.getItem(position - lv.getHeaderViewsCount()).onLongClick(view);
     }
 
-    public IconListFragmentAdapter getAdapter() {
+    public SimpleListFragmentAdapter getAdapter() {
         return adapter;
     }
 
-    public IconListFragment removeItem(IconListItem li) {
+    public SimpleListFragment removeItem(SimpleListItem li) {
         getAdapter().remove(li);
         return this;
     }
 
-    public IconListFragment addItem(IconListItem li) {
+    public SimpleListFragment addItem(SimpleListItem li) {
         getAdapter().add(li);
         return this;
     }
 
-    public IconListFragment insertItem(IconListItem li) {
+    public SimpleListFragment insertItem(SimpleListItem li) {
         getAdapter().insert(li, 0);
         return this;
     }
 
-    public IconListFragment clearItems() {
+    public SimpleListFragment clearItems() {
         adapter.clear();
         return this;
+    }
+
+    public void setSelectable(boolean selectable) {
+        adapter.setSelectable(selectable);
     }
 }

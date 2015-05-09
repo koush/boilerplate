@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:gravity="center_vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:gravity="center_vertical"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
 
     <com.koushikdutta.boilerplate.TintedImageView
             android:layout_gravity="center_vertical"
@@ -18,5 +18,5 @@
             android:layout_marginLeft="@dimen/boilerplate_list_item_second_column_horizontalMargin"
             style="@style/TextAppearance.AppCompat.Body2"
             android:layout_width="wrap_content"
-            android:layout_height="48dp" />
+            android:layout_height="48dp"/>
 </FrameLayout>

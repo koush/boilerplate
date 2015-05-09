@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:gravity="center_vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <com.koushikdutta.boilerplate.TintedTextView
+            android:gravity="center_vertical"
+            android:id="@+id/icon_list_fragment_title"
+            android:layout_marginLeft="@dimen/boilerplate_list_item_layout_horizontalMargin"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="48dp"/>
+
+    <android.support.v7.widget.SwitchCompat
+            android:id="@+id/checkbox"
+            android:layout_marginLeft="@dimen/boilerplate_list_item_checkbox_horizontalMargin"
+            android:layout_marginRight="@dimen/boilerplate_list_item_checkbox_horizontalMargin"
+            android:layout_gravity="center_vertical|right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+</LinearLayout>
