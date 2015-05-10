@@ -1,7 +1,9 @@
-package com.koushikdutta.boilerplate;
+package com.koushikdutta.boilerplate.simplelist;
 
 import android.view.View;
 import android.widget.TextView;
+
+import com.koushikdutta.boilerplate.R;
 
 /**
  * Created by koush on 5/9/15.
@@ -36,6 +38,6 @@ public class SimpleListTwoLineCheckboxItem extends SimpleListCheckboxItem {
 
     @Override
     int getViewType() {
-        return R.layout.icon_list_fragment_two_line_checkbox_item;
+        return R.layout.simple_list_fragment_two_line_checkbox_item;
     }
 }

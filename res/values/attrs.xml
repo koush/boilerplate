@@ -5,6 +5,7 @@
             <enum name="none" value="0" />
             <enum name="normal" value="1" />
             <enum name="inverse" value="2" />
+            <enum name="colorFilter" value="3" />
         </attr>
     </declare-styleable>
     <declare-styleable name="TintedProgressBar">

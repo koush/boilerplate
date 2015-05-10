@@ -1,4 +1,4 @@
-package com.koushikdutta.boilerplate;
+package com.koushikdutta.boilerplate.simplelist;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.koushikdutta.boilerplate.R;
 import com.koushikdutta.boilerplate.recyclerview.GridRecyclerView;
 
 /**
@@ -40,7 +41,7 @@ public class SimpleListFragment extends Fragment implements AdapterView.OnItemCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.icon_list_fragment, null);
+        return inflater.inflate(R.layout.simple_list_fragment, null);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class SimpleListFragment extends Fragment implements AdapterView.OnItemCl
         ListView lv = (ListView) parent;
         if (position < lv.getHeaderViewsCount())
             return;
-        adapter.getItem(position - lv.getHeaderViewsCount()).onClick(view);
+        adapter.getItem(position - lv.getHeaderViewsCount()).onClick();
     }
 
     @Override
@@ -56,7 +57,7 @@ public class SimpleListFragment extends Fragment implements AdapterView.OnItemCl
         ListView lv = (ListView) parent;
         if (position < lv.getHeaderViewsCount())
             return false;
-        return adapter.getItem(position - lv.getHeaderViewsCount()).onLongClick(view);
+        return adapter.getItem(position - lv.getHeaderViewsCount()).onLongClick();
     }
 
     public SimpleListFragmentAdapter getAdapter() {
@@ -73,14 +74,18 @@ public class SimpleListFragment extends Fragment implements AdapterView.OnItemCl
         return this;
     }
 
-    public SimpleListFragment insertItem(SimpleListItem li) {
-        getAdapter().insert(li, 0);
+    public SimpleListFragment insertItem(int index, SimpleListItem li) {
+        getAdapter().insert(li, index);
         return this;
     }
 
     public SimpleListFragment clearItems() {
         adapter.clear();
         return this;
+    }
+
+    public int getItemCount() {
+        return adapter.getItemCount();
     }
 
     public void setSelectable(boolean selectable) {

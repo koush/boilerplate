@@ -1,4 +1,4 @@
-package com.koushikdutta.boilerplate;
+package com.koushikdutta.boilerplate.tint;
 
 import android.content.Context;
 import android.graphics.PorterDuff;

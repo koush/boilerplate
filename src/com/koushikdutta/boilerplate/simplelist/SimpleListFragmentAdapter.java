@@ -1,10 +1,13 @@
-package com.koushikdutta.boilerplate;
+package com.koushikdutta.boilerplate.simplelist;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.koushikdutta.boilerplate.R;
+
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
@@ -14,9 +17,9 @@ public class SimpleListFragmentAdapter extends RecyclerView.Adapter<SimpleListFr
     ArrayList<SimpleListItem> items = new ArrayList<SimpleListItem>();
     SimpleListFragment fragment;
     boolean selectable = true;
-    View lastSelected;
+    WeakReference<View> lastSelected;
 
-    public class IconListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class IconListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         SimpleListItem item;
         public IconListViewHolder(View itemView) {
             super(itemView);
@@ -24,13 +27,21 @@ public class SimpleListFragmentAdapter extends RecyclerView.Adapter<SimpleListFr
 
         @Override
         public void onClick(View v) {
-            if (selectable) {
-                if (lastSelected != null)
-                    lastSelected.setSelected(false);
+            if (item.selectable() && selectable) {
+                if (lastSelected != null) {
+                    View l = lastSelected.get();
+                    if (l != null)
+                        l.setSelected(false);
+                }
                 v.setSelected(true);
-                lastSelected = v;
+                lastSelected = new WeakReference<View>(v);
             }
-            item.onClick(v);
+            item.onClick();
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return item.onLongClick();
         }
     }
 
@@ -43,7 +54,10 @@ public class SimpleListFragmentAdapter extends RecyclerView.Adapter<SimpleListFr
     public IconListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
         IconListViewHolder vh = new IconListViewHolder(view);
-        view.setOnClickListener(vh);
+        if (viewType != R.layout.simple_list_divider) {
+            view.setOnClickListener(vh);
+            view.setOnLongClickListener(vh);
+        }
         return vh;
     }
 
@@ -93,7 +107,9 @@ public class SimpleListFragmentAdapter extends RecyclerView.Adapter<SimpleListFr
     public void setSelectable(boolean selectable) {
         this.selectable = selectable;
         if (!selectable && lastSelected != null) {
-            lastSelected.setSelected(false);
+            View l = lastSelected.get();
+            if (l != null)
+                l.setSelected(false);
             lastSelected = null;
         }
     }

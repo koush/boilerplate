@@ -17,6 +17,8 @@ import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
+import com.koushikdutta.boilerplate.tint.TintHelper;
+
 /**
  * Created by koush on 4/4/15.
  */
@@ -98,36 +100,6 @@ public class ScrollingToolbarLayout extends FrameLayout {
     }
 
     boolean scrollOffEnabled;
-    public void enableToolbarScrollOff(final ListView listView, final HeaderAbsListView.OnScrollListener scrollListener, Fragment fragment) {
-        enableToolbarScrollOff(new HeaderAbsListView() {
-            @Override
-            public void addHeaderView(View view) {
-                listView.addHeaderView(view);
-            }
-
-            @Override
-            public void setOnScrollListener(final HeaderAbsListView.OnScrollListener l) {
-                listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(AbsListView view, int scrollState) {
-                        l.onScrollStateChanged(view, scrollState);
-                    }
-
-                    @Override
-                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                        l.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
-                    }
-                });
-            }
-        }, scrollListener, fragment);
-    }
-
-    public void enableToolbarScrollOff(final AbsListView listView, HeaderAbsListView.OnScrollListener scrollListener, Fragment fragment) {
-        if (listView instanceof ListView)
-            enableToolbarScrollOff((ListView)listView, scrollListener, fragment);
-        else
-            enableToolbarScrollOff((HeaderAbsListView)listView, scrollListener, fragment);
-    }
 
     public void enableToolbarScrollOff(HeaderAbsListView listView, final HeaderAbsListView.OnScrollListener scrollListener, final Fragment fragment) {
         scrollOffEnabled = true;
@@ -149,7 +121,7 @@ public class ScrollingToolbarLayout extends FrameLayout {
         AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, extra);
         FrameLayout frameLayout = new FrameLayout(getContext());
         frameLayout.setLayoutParams(lp);
-        listView.addHeaderView(frameLayout);
+        listView.addHeaderView(0, frameLayout);
 
         listView.setOnScrollListener(new HeaderAbsListView.OnScrollListener() {
             @Override
@@ -212,8 +184,22 @@ public class ScrollingToolbarLayout extends FrameLayout {
                     // if there's less than toolbar height left, start scrolling off.
                     if (remainder < toolbarHeight) {
                         remainder = toolbarHeight - remainder;
-                        if (existingToolbarYAnimation == null)
-                            toolbarContainer.setTranslationY(-remainder);
+                        if (existingToolbarYAnimation == null) {
+                            float diff = -remainder - toolbarContainer.getTranslationY();
+                            if (false && Math.abs(diff) > toolbarHeight / 4) {
+                                if (toolbarContainer.getTranslationY() < -remainder) {
+                                    // scrolling down
+                                    toolbarScrollIn();
+                                }
+                                else {
+                                    // scrolling up
+                                    toolbarScrollOut();
+                                }
+                            }
+                            else {
+                                toolbarContainer.setTranslationY(-remainder);
+                            }
+                        }
                         if (backdrop != null)
                             backdrop.setTranslationY(-remainder);
                     } else {

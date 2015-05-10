@@ -1,14 +1,7 @@
-package com.koushikdutta.boilerplate;
+package com.koushikdutta.boilerplate.tint;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Matrix;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -19,7 +12,8 @@ public class TintedImageView extends ImageView {
     public enum StateListFilter {
         None,
         Normal,
-        Inverse
+        Inverse,
+        ColorFilter
     }
 
     int stateListFilter;
@@ -51,8 +45,10 @@ public class TintedImageView extends ImageView {
         if (stateListFilter != 0) {
             if (stateListFilter == 1)
                 drawable = TintHelper.getStateListDrawable(getContext(), drawable, TintHelper.getTextColorPrimary(getContext()));
-            else
+            else if (stateListFilter == 2)
                 drawable = TintHelper.getStateListDrawable(getContext(), drawable, TintHelper.getTextColorPrimaryInverse(getContext()));
+            else
+                drawable = TintHelper.getColorMatrixStateListDrawable(getContext(), drawable, TintHelper.getTextColorPrimary(getContext()));
         }
         super.setImageDrawable(drawable);
     }

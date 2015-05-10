@@ -15,6 +15,6 @@ public interface HeaderAbsListView {
                              int totalItemCount);
     }
 
-    void addHeaderView(View view);
+    void addHeaderView(int index, View view);
     void setOnScrollListener(OnScrollListener l);
 }

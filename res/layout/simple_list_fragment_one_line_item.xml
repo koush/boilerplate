@@ -5,7 +5,7 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content">
 
-    <com.koushikdutta.boilerplate.TintedTextView
+    <com.koushikdutta.boilerplate.tint.TintedTextView
             android:gravity="center_vertical"
             android:id="@+id/icon_list_fragment_title"
             android:layout_marginLeft="@dimen/boilerplate_list_item_layout_horizontalMargin"

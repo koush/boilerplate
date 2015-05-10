@@ -113,9 +113,13 @@ public class GridRecyclerView extends RecyclerView implements HeaderAbsListView 
         return wrappedAdapter;
     }
 
-    @Override
     public void addHeaderView(View view) {
-        headerViewAdapter.addHeaderView(view);
+        headerViewAdapter.addHeaderView(headerViewAdapter.getItemCount(), view);
+    }
+
+    @Override
+    public void addHeaderView(int index, View view) {
+        headerViewAdapter.addHeaderView(index, view);
     }
 
     @Override

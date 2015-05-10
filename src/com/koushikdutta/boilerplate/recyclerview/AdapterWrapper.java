@@ -219,7 +219,7 @@ public class AdapterWrapper extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == 0) {
-            View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.separated_list_adapter_list_header, parent, false);
+            View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_wrapper_list_header, parent, false);
             return new HeaderViewHolder(header);
         }
         WrappedAdapter info = viewTypes.get(viewType);

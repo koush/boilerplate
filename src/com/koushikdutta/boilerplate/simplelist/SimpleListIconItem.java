@@ -1,12 +1,15 @@
-package com.koushikdutta.boilerplate;
+package com.koushikdutta.boilerplate.simplelist;
 
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
+import com.koushikdutta.boilerplate.R;
+import com.koushikdutta.boilerplate.tint.TintedImageView;
+
 /**
  * Created by koush on 3/29/15.
  */
-public class SimpleListIconItem extends SimpleListItem {
+public class SimpleListIconItem extends SimpleListOneLineItem {
     private Drawable icon;
     private boolean selectableIcon;
 
@@ -28,21 +31,14 @@ public class SimpleListIconItem extends SimpleListItem {
         return icon(getResources().getDrawable(icon));
     }
 
-    public SimpleListIconItem selectableIcon(int icon) {
+    public SimpleListIconItem tintableIcon(int icon) {
         selectableIcon = true;
         return icon(icon);
     }
 
-    public SimpleListIconItem selectableIcon(Drawable drawable) {
+    public SimpleListIconItem tintableIcon(Drawable drawable) {
         selectableIcon = true;
         return icon(drawable);
-    }
-
-    public void onClick(View v) {
-    }
-
-    public boolean onLongClick(View v) {
-        return false;
     }
 
     protected void bindView(View v) {
@@ -56,6 +52,6 @@ public class SimpleListIconItem extends SimpleListItem {
     }
 
     int getViewType() {
-        return R.layout.icon_list_fragment_icon_one_line_item;
+        return R.layout.simple_list_fragment_icon_one_line_item;
     }
 }

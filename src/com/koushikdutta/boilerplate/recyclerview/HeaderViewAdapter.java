@@ -18,11 +18,11 @@ public class HeaderViewAdapter extends RecyclerView.Adapter<HeaderViewAdapter.Vi
     ArrayList<Header> headers = new ArrayList<Header>();
     int viewTypeCount;
 
-    public void addHeaderView(View header) {
+    public void addHeaderView(int index, View header) {
         Header h = new Header();
         h.view = header;
         h.viewType = viewTypeCount++;
-        headers.add(h);
+        headers.add(index, h);
         notifyDataSetChanged();
     }
 

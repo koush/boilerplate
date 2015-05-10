@@ -1,14 +1,14 @@
-package com.koushikdutta.boilerplate;
+package com.koushikdutta.boilerplate.simplelist;
 
-import android.support.v7.widget.AppCompatCheckBox;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
+
+import com.koushikdutta.boilerplate.R;
 
 /**
  * Created by koush on 5/9/15.
  */
-public class SimpleListCheckboxItem extends SimpleListItem {
+public class SimpleListCheckboxItem extends SimpleListOneLineItem {
     boolean checked;
     public SimpleListCheckboxItem(SimpleListFragmentAdapter adapter) {
         super(adapter);
@@ -29,9 +29,9 @@ public class SimpleListCheckboxItem extends SimpleListItem {
     }
 
     @Override
-    protected void onClick(View v) {
-        super.onClick(v);
+    void onClick() {
         checked(!checked());
+        super.onClick();
     }
 
     @Override
@@ -44,13 +44,13 @@ public class SimpleListCheckboxItem extends SimpleListItem {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 checked = isChecked;
-                SimpleListCheckboxItem.super.onClick(buttonView);
+                SimpleListCheckboxItem.super.onClick();
             }
         });
     }
 
     @Override
     int getViewType() {
-        return R.layout.icon_list_fragment_one_line_checkbox_item;
+        return R.layout.simple_list_fragment_one_line_checkbox_item;
     }
 }

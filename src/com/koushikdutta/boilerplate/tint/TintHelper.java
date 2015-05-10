@@ -1,4 +1,4 @@
-package com.koushikdutta.boilerplate;
+package com.koushikdutta.boilerplate.tint;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -6,9 +6,12 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.util.TypedValue;
+
+import com.koushikdutta.boilerplate.R;
 
 /**
  * Created by koush on 3/30/15.
@@ -96,13 +99,31 @@ public class TintHelper {
             return null;
         int colorPrimary = getColorPrimary(context);
 
-        StateListDrawable ret = new StateListDrawable();
         Drawable coloredState = drawable.getConstantState().newDrawable().mutate();
         Drawable normalState = drawable.getConstantState().newDrawable().mutate();
 
         setColorFilter(normalState, textColorPrimary);
         setColorFilter(coloredState, colorPrimary);
 
+        return getStateListDrawable(context, coloredState, normalState);
+    }
+
+    public static StateListDrawable getColorMatrixStateListDrawable(Context context, Drawable drawable, int textColorPrimary) {
+        if (drawable == null)
+            return null;
+        int colorPrimary = getColorPrimary(context);
+
+        Drawable coloredState = drawable.getConstantState().newDrawable().mutate();
+        Drawable normalState = drawable.getConstantState().newDrawable().mutate();
+
+        normalState.setColorFilter(textColorPrimary, PorterDuff.Mode.SRC_IN);
+        coloredState.setColorFilter(textColorPrimary, PorterDuff.Mode.SRC_IN);
+
+        return getStateListDrawable(context, coloredState, normalState);
+    }
+
+    public static StateListDrawable getStateListDrawable(Context context, Drawable coloredState, Drawable normalState) {
+        StateListDrawable ret = new StateListDrawable();
         ret.addState(new int[]{android.R.attr.state_pressed}, coloredState);
         ret.addState(new int[]{android.R.attr.state_focused}, coloredState);
         ret.addState(new int[]{android.R.attr.state_selected}, coloredState);
