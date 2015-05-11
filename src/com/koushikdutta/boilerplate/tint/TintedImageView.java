@@ -35,7 +35,7 @@ public class TintedImageView extends ImageView {
 
     private void init(AttributeSet attrs) {
         stateListFilter = attrs != null ? attrs.getAttributeIntValue("http://schemas.android.com/apk/res-auto", "stateListFilter", 0) : 0;
-        setImageDrawable(original);
+        setImageDrawable(original != null ? original : getDrawable());
     }
 
     Drawable original;

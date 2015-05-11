@@ -6,9 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.util.TypedValue;
 
 import com.koushikdutta.boilerplate.R;
@@ -84,7 +82,7 @@ public class TintHelper {
     };
     private static final ColorMatrix colorMatrixNegative = new ColorMatrix(colorMatrix_Negative);
 
-    private static void setColorFilter(Drawable drawable, int color) {
+    static void setColorFilter(Drawable drawable, int color) {
         ColorMatrix s = new ColorMatrix();
         s.setScale(1 - Color.red(color) / 255f, 1 - Color.green(color) / 255f, 1 - Color.blue(color) / 255f, 1);
         s.preConcat(colorMatrixNegative);
@@ -94,43 +92,36 @@ public class TintHelper {
         drawable.setColorFilter(filter);
     }
 
-    public static StateListDrawable getStateListDrawable(Context context, Drawable drawable, int textColorPrimary) {
+    public static Drawable getStateListDrawable(Context context, Drawable drawable, int textColorPrimary) {
         if (drawable == null)
             return null;
         int colorPrimary = getColorPrimary(context);
 
-        Drawable coloredState = drawable.getConstantState().newDrawable().mutate();
-        Drawable normalState = drawable.getConstantState().newDrawable().mutate();
-
-        setColorFilter(normalState, textColorPrimary);
-        setColorFilter(coloredState, colorPrimary);
-
-        return getStateListDrawable(context, coloredState, normalState);
+        return getStateListDrawable(drawable, colorPrimary, textColorPrimary);
     }
 
-    public static StateListDrawable getColorMatrixStateListDrawable(Context context, Drawable drawable, int textColorPrimary) {
+    public static Drawable getColorMatrixStateListDrawable(Context context, Drawable drawable, int textColorPrimary) {
         if (drawable == null)
             return null;
         int colorPrimary = getColorPrimary(context);
 
-        Drawable coloredState = drawable.getConstantState().newDrawable().mutate();
-        Drawable normalState = drawable.getConstantState().newDrawable().mutate();
-
-        normalState.setColorFilter(textColorPrimary, PorterDuff.Mode.SRC_IN);
-        coloredState.setColorFilter(textColorPrimary, PorterDuff.Mode.SRC_IN);
-
-        return getStateListDrawable(context, coloredState, normalState);
+        SelectorDrawable ret = getStateListDrawable(drawable, colorPrimary, textColorPrimary);
+        ret.porterDuff = true;
+        return ret;
     }
 
-    public static StateListDrawable getStateListDrawable(Context context, Drawable coloredState, Drawable normalState) {
-        StateListDrawable ret = new StateListDrawable();
-        ret.addState(new int[]{android.R.attr.state_pressed}, coloredState);
-        ret.addState(new int[]{android.R.attr.state_focused}, coloredState);
-        ret.addState(new int[]{android.R.attr.state_selected}, coloredState);
-        ret.addState(new int[]{android.R.attr.state_checked}, coloredState);
-        ret.addState(new int[]{android.R.attr.state_active}, coloredState);
-        ret.addState(new int[]{android.R.attr.state_activated}, coloredState);
-        ret.addState(new int[]{}, normalState);
+    private static SelectorDrawable getStateListDrawable(Drawable drawable, int colored, int normal) {
+        drawable = drawable.getConstantState().newDrawable().mutate();
+        SelectorDrawable ret = new SelectorDrawable();
+        ret.colored = colored;
+        ret.normal = normal;
+        ret.addState(new int[]{android.R.attr.state_pressed}, drawable);
+        ret.addState(new int[]{android.R.attr.state_focused}, drawable);
+        ret.addState(new int[]{android.R.attr.state_selected}, drawable);
+        ret.addState(new int[]{android.R.attr.state_checked}, drawable);
+        ret.addState(new int[]{android.R.attr.state_active}, drawable);
+        ret.addState(new int[]{android.R.attr.state_activated}, drawable);
+        ret.addState(new int[]{}, drawable);
 
         return ret;
     }
