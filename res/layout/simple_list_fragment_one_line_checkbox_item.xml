@@ -7,6 +7,8 @@
               android:layout_height="wrap_content">
 
     <com.koushikdutta.boilerplate.tint.TintedTextView
+            android:singleLine="true"
+            android:ellipsize="end"
             android:gravity="center_vertical"
             android:id="@+id/icon_list_fragment_title"
             android:layout_marginLeft="@dimen/boilerplate_list_item_layout_horizontalMargin"

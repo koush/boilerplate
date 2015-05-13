@@ -14,6 +14,8 @@
             android:layout_height="72dp">
 
         <com.koushikdutta.boilerplate.tint.TintedTextView
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:id="@+id/icon_list_fragment_title"
                 style="@style/TextAppearance.AppCompat.Body2"
@@ -21,6 +23,8 @@
                 android:layout_height="wrap_content"/>
 
         <com.koushikdutta.boilerplate.tint.TintedTextView
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:id="@+id/icon_list_fragment_subtitle"
                 style="@style/TextAppearance.AppCompat.Caption"
