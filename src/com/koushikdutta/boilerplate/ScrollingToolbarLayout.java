@@ -6,16 +6,17 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.ReceiverCallNotAllowedException;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 
 import com.koushikdutta.boilerplate.tint.TintHelper;
 
@@ -101,7 +102,7 @@ public class ScrollingToolbarLayout extends FrameLayout {
 
     boolean scrollOffEnabled;
 
-    public void enableToolbarScrollOff(HeaderAbsListView listView, final HeaderAbsListView.OnScrollListener scrollListener, final Fragment fragment) {
+    public void enableToolbarScrollOff(final HeaderRecyclerView headerRecyclerView, final Fragment fragment) {
         scrollOffEnabled = true;
 
         int extra;
@@ -121,13 +122,13 @@ public class ScrollingToolbarLayout extends FrameLayout {
         AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, extra);
         FrameLayout frameLayout = new FrameLayout(getContext());
         frameLayout.setLayoutParams(lp);
-        listView.addHeaderView(0, frameLayout);
+        headerRecyclerView.addHeaderView(0, frameLayout);
 
-        listView.setOnScrollListener(new HeaderAbsListView.OnScrollListener() {
+        headerRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(ViewGroup absListView, int scrollState) {
-                if (scrollListener != null)
-                    scrollListener.onScrollStateChanged(absListView, scrollState);
+            public void onScrollStateChanged(RecyclerView absListView, int scrollState) {
+                if (scrollState != RecyclerView.SCROLL_STATE_IDLE)
+                    return;
                 if (absListView.getChildCount() < 1)
                     return;
                 final View toolbarContainer = getChildAt(getChildCount() - 1);
@@ -137,19 +138,15 @@ public class ScrollingToolbarLayout extends FrameLayout {
             }
 
             @Override
-            public void onScroll(ViewGroup absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (scrollListener != null)
-                    scrollListener.onScroll(absListView, firstVisibleItem, visibleItemCount, totalItemCount);
-
-                if (absListView.getChildCount() < 1)
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (recyclerView.getChildCount() < 1)
                     return;
 
                 if (fragment != null && !fragment.getUserVisibleHint())
                     return;
 
-                cancelToolbarScroll();
-                final View firstView = absListView.getChildAt(0);
-
+//                cancelToolbarScroll();
+                final View firstView = recyclerView.getChildAt(0);
                 final View toolbarContainer = getChildAt(getChildCount() - 1);
                 final View backdrop;
                 if (getChildCount() == 3)
@@ -158,6 +155,7 @@ public class ScrollingToolbarLayout extends FrameLayout {
                     backdrop = null;
                 final int toolbarHeight = toolbarContainer.getHeight();
 
+                int firstVisibleItem = headerRecyclerView.findFirstVisibleItemPosition();
                 if (backdrop != null) {
                     int newBackdropHeight;
                     int backdropHeight = getResources().getDimensionPixelSize(R.dimen.icon_list_drawer_activity_backdrop_height);
@@ -190,13 +188,11 @@ public class ScrollingToolbarLayout extends FrameLayout {
                                 if (toolbarContainer.getTranslationY() < -remainder) {
                                     // scrolling down
                                     toolbarScrollIn();
-                                }
-                                else {
+                                } else {
                                     // scrolling up
                                     toolbarScrollOut();
                                 }
-                            }
-                            else {
+                            } else {
                                 toolbarContainer.setTranslationY(-remainder);
                             }
                         }

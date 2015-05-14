@@ -6,14 +6,14 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.koushikdutta.boilerplate.HeaderAbsListView;
+import com.koushikdutta.boilerplate.HeaderRecyclerView;
 
 import java.util.Hashtable;
 
 /**
  * Created by koush on 4/19/15.
  */
-public class GridRecyclerView extends RecyclerView implements HeaderAbsListView {
+public class GridRecyclerView extends RecyclerView implements HeaderRecyclerView {
     public GridRecyclerView(Context context) {
         super(context);
         init(context, null);
@@ -123,22 +123,8 @@ public class GridRecyclerView extends RecyclerView implements HeaderAbsListView 
     }
 
     @Override
-    public void setOnScrollListener(final HeaderAbsListView.OnScrollListener l) {
-        super.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                l.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int first = gridLayoutManager.findFirstVisibleItemPosition();
-                int last = gridLayoutManager.findLastVisibleItemPosition();
-                l.onScroll(recyclerView, first, last - first, adapter.getItemCount());
-            }
-        });
+    public int findFirstVisibleItemPosition() {
+        return gridLayoutManager.findFirstVisibleItemPosition();
     }
 
     View emptyView;
