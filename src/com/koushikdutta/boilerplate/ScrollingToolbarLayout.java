@@ -127,9 +127,13 @@ public class ScrollingToolbarLayout extends FrameLayout {
         headerRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView absListView, int scrollState) {
+                // when scrolling stops, and the toolbar is only partially scrolled off, force to scroll bar in completely
                 if (scrollState != RecyclerView.SCROLL_STATE_IDLE)
                     return;
                 if (absListView.getChildCount() < 1)
+                    return;
+                int firstVisibleItem = headerRecyclerView.findFirstVisibleItemPosition();
+                if (firstVisibleItem != 0)
                     return;
                 final View toolbarContainer = getChildAt(getChildCount() - 1);
                 if (toolbarContainer.getTranslationY() <= -toolbarContainer.getHeight() || (existingToolbarYAnimation != null && existingToolbarYEnd <= toolbarContainer.getHeight()))

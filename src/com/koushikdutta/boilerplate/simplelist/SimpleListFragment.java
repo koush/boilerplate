@@ -24,18 +24,21 @@ public class SimpleListFragment extends Fragment implements AdapterView.OnItemCl
         adapter = new SimpleListFragmentAdapter(this);
     }
 
-    public static GridRecyclerView getIconListFragmentListView(View view) {
+    public static GridRecyclerView getGridRecyclerView(View view) {
         return (GridRecyclerView)view.findViewById(android.R.id.list);
     }
 
-    public static ViewGroup getIconListViewContainer(View view) {
-        return (ViewGroup)view.findViewById(R.id.list_container);
+    public GridRecyclerView getGridRecyclerView() {
+        View view = getView();
+        if (view == null)
+            return null;
+        return getGridRecyclerView(view);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        GridRecyclerView lv = getIconListFragmentListView(view);
+        GridRecyclerView lv = getGridRecyclerView(view);
         lv.setAdapter(adapter);
     }
 

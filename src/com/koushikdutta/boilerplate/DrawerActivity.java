@@ -98,6 +98,7 @@ public abstract class DrawerActivity extends AppCompatActivity {
 //                View content = getDrawer().getChildAt(0);
 //                View drawer = getDrawer().getChildAt(1);
 //                content.setTranslationX(Math.min(content.getMeasuredWidth(), drawer.getMeasuredWidth()) / 3 * interpolator.getInterpolation(slideOffset));
+                onDrawerOpen();
                 if (hasOpened)
                     WindowChromeUtils.setStatusBarColor(getWindow(), (int)evaluator.evaluate(slideOffset, originalStatusBarColor, 0x4D000000));
             }
@@ -133,6 +134,9 @@ public abstract class DrawerActivity extends AppCompatActivity {
     public abstract int getDrawerOpenString();
 
     public abstract int getDrawerCloseString();
+
+    protected void onDrawerOpen() {
+    }
 
     protected abstract Fragment createDrawerFragment();
 
