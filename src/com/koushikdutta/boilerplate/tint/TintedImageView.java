@@ -47,8 +47,10 @@ public class TintedImageView extends ImageView {
                 drawable = TintHelper.getStateListDrawable(getContext(), drawable, TintHelper.getTextColorPrimary(getContext()));
             else if (stateListFilter == 2)
                 drawable = TintHelper.getStateListDrawable(getContext(), drawable, TintHelper.getTextColorPrimaryInverse(getContext()));
-            else
+            else if (stateListFilter == 3)
                 drawable = TintHelper.getColorMatrixStateListDrawable(getContext(), drawable, TintHelper.getTextColorPrimary(getContext()));
+            else
+                drawable = TintHelper.getColorMatrixStateListDrawable(getContext(), drawable, TintHelper.getTextColorPrimaryInverse(getContext()));
         }
         super.setImageDrawable(drawable);
     }

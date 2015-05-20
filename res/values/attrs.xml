@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="TintedImageView">
-        <attr name="stateListFilter" format="enum" >
+        <attr name="drawableFilterMode" format="enum" >
+            <!--No Filter-->
             <enum name="none" value="0" />
+            <!--Turn a black on transparent background image into a colorized on transparent background image-->
             <enum name="normal" value="1" />
+            <!--Turn a black on transparent background image into a colorized on transparent background image using text color primary inverse -->
             <enum name="inverse" value="2" />
-            <enum name="colorFilter" value="3" />
+            <!--Turn a white on transparent background image into a colorized on transparent background image-->
+            <enum name="porterDuff" value="3" />
+            <enum name="porterDufInverse" value="4" />
         </attr>
     </declare-styleable>
     <declare-styleable name="TintedProgressBar">
