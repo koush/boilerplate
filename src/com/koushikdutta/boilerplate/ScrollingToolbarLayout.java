@@ -17,6 +17,7 @@ import android.view.ViewPropertyAnimator;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 
+import com.koushikdutta.boilerplate.recyclerview.IHeaderRecyclerView;
 import com.koushikdutta.boilerplate.tint.TintHelper;
 
 /**
@@ -101,7 +102,7 @@ public class ScrollingToolbarLayout extends FrameLayout {
 
     boolean scrollOffEnabled;
 
-    public void enableToolbarScrollOff(final HeaderRecyclerView headerRecyclerView, final Fragment fragment) {
+    public void enableToolbarScrollOff(final IHeaderRecyclerView headerRecyclerView, final Fragment fragment) {
         scrollOffEnabled = true;
 
         int extra;
