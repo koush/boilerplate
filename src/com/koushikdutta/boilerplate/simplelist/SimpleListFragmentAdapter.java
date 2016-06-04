@@ -1,5 +1,6 @@
 package com.koushikdutta.boilerplate.simplelist;
 
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  */
 public class SimpleListFragmentAdapter extends RecyclerView.Adapter<SimpleListFragmentAdapter.IconListViewHolder> {
     ArrayList<SimpleListItem> items = new ArrayList<SimpleListItem>();
-    SimpleListFragment fragment;
+    Resources resources;
     boolean selectable = true;
     WeakReference<View> lastSelected;
 
@@ -73,7 +74,11 @@ public class SimpleListFragmentAdapter extends RecyclerView.Adapter<SimpleListFr
     }
 
     public SimpleListFragmentAdapter(SimpleListFragment fragment) {
-        this.fragment = fragment;
+        this.resources = fragment.getResources();
+    }
+
+    public SimpleListFragmentAdapter(Resources resources) {
+        this.resources = resources;
     }
 
     public SimpleListItem getItem(int i) {

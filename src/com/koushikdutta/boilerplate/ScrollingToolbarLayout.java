@@ -203,14 +203,22 @@ public class ScrollingToolbarLayout extends FrameLayout {
                         if (backdrop != null)
                             backdrop.setTranslationY(-remainder);
                     } else {
-                        toolbarScrollIn();
+                        cancelToolbarScroll();
+                        toolbarContainer.setTranslationY(0);
+//                        toolbarScrollIn();
                         if (backdrop != null)
                             backdrop.setTranslationY(0);
                     }
                     return;
                 }
 
-                toolbarScrollOut();
+                if (firstVisibleItem == 1) {
+                    cancelToolbarScroll();
+                    toolbarContainer.setTranslationY(-toolbarHeight);
+                }
+                else {
+                    toolbarScrollOut();
+                }
                 if (backdrop != null)
                     backdrop.setTranslationY(-toolbarHeight);
             }

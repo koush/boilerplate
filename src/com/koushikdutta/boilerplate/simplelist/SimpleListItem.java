@@ -13,7 +13,7 @@ public abstract class SimpleListItem {
     private SimpleListItemLongClickListener onLongClick;
 
     protected Resources getResources() {
-        return adapter.fragment.getResources();
+        return adapter.resources;
     }
 
     public SimpleListItem(SimpleListFragmentAdapter adapter) {
