@@ -33,4 +33,15 @@ public final class AnimatedView {
             }
         });
     }
+    public static void setOnLongClickListener(final View view, final View.OnLongClickListener listener) {
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ScaleAnimation scale = new ScaleAnimation(.95f, 1f, .95f, 1f, Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
+                scale.setDuration(250);
+                view.startAnimation(scale);
+                return listener.onLongClick(view);
+            }
+        });
+    }
 }
