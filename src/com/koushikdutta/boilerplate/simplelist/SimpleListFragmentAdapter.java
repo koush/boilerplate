@@ -10,6 +10,8 @@ import com.koushikdutta.boilerplate.R;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by koush on 3/29/15.
@@ -18,7 +20,12 @@ public class SimpleListFragmentAdapter extends RecyclerView.Adapter<SimpleListFr
     ArrayList<SimpleListItem> items = new ArrayList<SimpleListItem>();
     Resources resources;
     boolean selectable = true;
-    WeakReference<View> lastSelected;
+    WeakReference<SimpleListItem> lastSelected;
+    Comparator<SimpleListItem> sort;
+
+    public void sort(Comparator<SimpleListItem> sort) {
+        this.sort = sort;
+    }
 
     public class IconListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         SimpleListItem item;
@@ -29,13 +36,8 @@ public class SimpleListFragmentAdapter extends RecyclerView.Adapter<SimpleListFr
         @Override
         public void onClick(View v) {
             if (item.selectable() && selectable) {
-                if (lastSelected != null) {
-                    View l = lastSelected.get();
-                    if (l != null)
-                        l.setSelected(false);
-                }
-                v.setSelected(true);
-                lastSelected = new WeakReference<View>(v);
+                lastSelected = new WeakReference<>(item);
+                notifyDataSetChanged();
             }
             item.onClick();
         }
@@ -66,6 +68,10 @@ public class SimpleListFragmentAdapter extends RecyclerView.Adapter<SimpleListFr
     public void onBindViewHolder(IconListViewHolder holder, int position) {
         holder.item = items.get(position);
         holder.item.bindView(holder.itemView);
+        if (lastSelected != null && lastSelected.get() == holder.item)
+            holder.itemView.setSelected(true);
+        else
+            holder.itemView.setSelected(false);
     }
 
     @Override
@@ -74,7 +80,7 @@ public class SimpleListFragmentAdapter extends RecyclerView.Adapter<SimpleListFr
     }
 
     public SimpleListFragmentAdapter(SimpleListFragment fragment) {
-        this.resources = fragment.getResources();
+        this(fragment.getResources());
     }
 
     public SimpleListFragmentAdapter(Resources resources) {
@@ -85,37 +91,42 @@ public class SimpleListFragmentAdapter extends RecyclerView.Adapter<SimpleListFr
         return items.get(i);
     }
 
-    public SimpleListFragmentAdapter add(SimpleListItem item) {
-        items.add(item);
+    protected void internalChanged() {
+        if (sort != null)
+            Collections.sort(items, sort);
         notifyDataSetChanged();
-        return this;
+    }
+
+    public SimpleListFragmentAdapter add(SimpleListItem item) {
+        return insert(item, getItemCount());
     }
 
     public SimpleListFragmentAdapter remove(SimpleListItem item) {
         items.remove(item);
-        notifyDataSetChanged();
+        internalChanged();
         return this;
     }
 
     public SimpleListFragmentAdapter clear() {
         items.clear();
-        notifyDataSetChanged();
+        internalChanged();
         return this;
     }
 
     public SimpleListFragmentAdapter insert(SimpleListItem item, int index) {
+        item.setAdapter(this);
         items.add(index, item);
-        notifyDataSetChanged();
+        internalChanged();
         return this;
     }
 
-    public void setSelectable(boolean selectable) {
+    public SimpleListFragmentAdapter selectable(boolean selectable) {
         this.selectable = selectable;
         if (!selectable && lastSelected != null) {
-            View l = lastSelected.get();
-            if (l != null)
-                l.setSelected(false);
             lastSelected = null;
+            notifyDataSetChanged();
         }
+
+        return this;
     }
 }

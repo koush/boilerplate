@@ -8,31 +8,53 @@ import android.view.View;
  */
 public abstract class SimpleListItem {
     private boolean selectable = true;
-    protected SimpleListFragmentAdapter adapter;
+    private Resources resources;
+    private SimpleListFragmentAdapter adapter;
     private SimpleListItemClickListener onClick;
     private SimpleListItemLongClickListener onLongClick;
 
+    protected void notifyDataSetChanged() {
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
+    }
+
     protected Resources getResources() {
-        return adapter.resources;
+        return resources;
+    }
+
+    public SimpleListItem(Resources resources) {
+        this.resources = resources;
     }
 
     public SimpleListItem(SimpleListFragmentAdapter adapter) {
-        this.adapter = adapter;
+        this(adapter.resources);
     }
 
     public SimpleListItem(SimpleListFragment fragment) {
         this(fragment.getAdapter());
     }
 
-    void onClick() {
+    void setAdapter(SimpleListFragmentAdapter adapter) {
+        this.adapter = adapter;
+    }
+
+    public void invokeClick() {
         if (onClick != null)
             onClick.onClick(this);
     }
 
-    boolean onLongClick() {
+    public boolean invokeLongClick() {
         if (onLongClick != null)
             return onLongClick.onLongClick(this);
         return false;
+    }
+
+    protected void onClick() {
+        invokeClick();
+    }
+
+    protected boolean onLongClick() {
+        return invokeLongClick();
     }
 
     public <T extends SimpleListItem> T click(SimpleListItemClickListener<T> listener) {

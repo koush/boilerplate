@@ -1,5 +1,6 @@
 package com.koushikdutta.boilerplate.simplelist;
 
+import android.content.res.Resources;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,6 +12,10 @@ import com.koushikdutta.boilerplate.R;
 public class SimpleListOneLineItem extends SimpleListItem {
     private CharSequence title;
 
+    public SimpleListOneLineItem(Resources resources) {
+        super(resources);
+    }
+
     public SimpleListOneLineItem(SimpleListFragmentAdapter adapter) {
         super(adapter);
     }
@@ -21,12 +26,16 @@ public class SimpleListOneLineItem extends SimpleListItem {
 
     public SimpleListOneLineItem title(CharSequence title) {
         this.title = title;
-        adapter.notifyDataSetChanged();
+        notifyDataSetChanged();
         return this;
     }
 
     public SimpleListOneLineItem title(int title) {
         return title(getResources().getText(title));
+    }
+
+    public CharSequence title() {
+        return title;
     }
 
     @Override

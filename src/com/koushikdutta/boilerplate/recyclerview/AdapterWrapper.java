@@ -90,6 +90,10 @@ public class AdapterWrapper extends RecyclerView.Adapter {
         Hashtable<Integer, Integer> unmappedViewTypes = new Hashtable<Integer, Integer>();
         RecyclerView.Adapter adapter;
 
+        public RecyclerView.Adapter getAdapter() {
+            return adapter;
+        }
+
         @Override
         public void onChanged() {
             super.onChanged();
@@ -130,11 +134,15 @@ public class AdapterWrapper extends RecyclerView.Adapter {
     ArrayList<WrappedAdapter> adapters = new ArrayList<WrappedAdapter>();
 
     public WrappedAdapter wrapAdapter(RecyclerView.Adapter adapter) {
+        return wrapAdapter(getAdapterCount(), adapter);
+    }
+
+    public WrappedAdapter wrapAdapter(int index, RecyclerView.Adapter adapter) {
         if (adapter == null)
             throw new AssertionError("adapter must not be null");
         WrappedAdapter info = new WrappedAdapter();
         info.adapter = adapter;
-        adapters.add(info);
+        adapters.add(index, info);
         adapter.registerAdapterDataObserver(info);
         notifyDataSetChanged();
         return info;
@@ -148,8 +156,10 @@ public class AdapterWrapper extends RecyclerView.Adapter {
         }
 
         for (int i = 0; i < adapters.size(); i++) {
-            if (adapters.get(i).adapter == adapter) {
-                unregisterAdapterDataObserver(adapters.remove(i));
+            WrappedAdapter wa = adapters.get(i);
+            if (wa.adapter == adapter) {
+                adapters.remove(i);
+                wa.adapter.unregisterAdapterDataObserver(wa);
                 notifyDataSetChanged();
                 return;
             }
@@ -273,6 +283,10 @@ public class AdapterWrapper extends RecyclerView.Adapter {
 
     public boolean isHeaderView(int position) {
         return getItemViewType(position) == 0;
+    }
+
+    public int getAdapterCount() {
+        return adapters.size();
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.koushikdutta.boilerplate.R;
  */
 public class SimpleListCheckboxItem extends SimpleListOneLineItem {
     boolean checked;
+    boolean showCheck = true;
     public SimpleListCheckboxItem(SimpleListFragmentAdapter adapter) {
         super(adapter);
     }
@@ -24,12 +25,22 @@ public class SimpleListCheckboxItem extends SimpleListOneLineItem {
 
     public SimpleListCheckboxItem checked(boolean checked) {
         this.checked = checked;
-        adapter.notifyDataSetChanged();
+        notifyDataSetChanged();
         return this;
     }
 
+    public SimpleListCheckboxItem showCheck(boolean showCheck) {
+        this.showCheck = showCheck;
+        notifyDataSetChanged();
+        return this;
+    }
+
+    public boolean showCheck() {
+        return showCheck;
+    }
+
     @Override
-    void onClick() {
+    protected void onClick() {
         checked(!checked());
         super.onClick();
     }
@@ -40,6 +51,7 @@ public class SimpleListCheckboxItem extends SimpleListOneLineItem {
         CompoundButton c = (CompoundButton)v.findViewById(R.id.checkbox);
         c.setOnCheckedChangeListener(null);
         c.setChecked(checked);
+        c.setVisibility(showCheck ? View.VISIBLE : View.INVISIBLE);
         c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

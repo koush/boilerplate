@@ -52,7 +52,10 @@ public class TintHelper {
 
     public static ColorStateList getTintColorStateList(Context context, int textColorPrimary) {
         int colorPrimary = getColorPrimary(context);
+        return getTintColorStateList(context, colorPrimary, textColorPrimary);
+    }
 
+    public static ColorStateList getTintColorStateList(Context context, int activeColor, int defaultColor) {
         return new ColorStateList(new int[][]{
         new int[]{android.R.attr.state_pressed},
         new int[]{android.R.attr.state_focused},
@@ -63,13 +66,13 @@ public class TintHelper {
         new int[]{}
         },
         new int[] {
-        colorPrimary,
-        colorPrimary,
-        colorPrimary,
-        colorPrimary,
-        colorPrimary,
-        colorPrimary,
-        textColorPrimary
+        activeColor,
+        activeColor,
+        activeColor,
+        activeColor,
+        activeColor,
+        activeColor,
+        defaultColor
         });
     }
 

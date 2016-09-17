@@ -92,6 +92,6 @@ public class SimpleListFragment extends Fragment implements AdapterView.OnItemCl
     }
 
     public void setSelectable(boolean selectable) {
-        adapter.setSelectable(selectable);
+        adapter.selectable(selectable);
     }
 }

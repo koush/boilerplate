@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="?android:attr/selectableItemBackground"
+              android:gravity="center_vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <com.koushikdutta.boilerplate.tint.TintedImageView
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/boilerplate_list_item_layout_horizontalMargin"
+            android:id="@+id/icon_list_fragment_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"/>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="@dimen/boilerplate_list_item_layout_horizontalMargin"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="72dp">
+        <com.koushikdutta.boilerplate.tint.TintedTextView
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:id="@+id/icon_list_fragment_title"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        <com.koushikdutta.boilerplate.tint.TintedTextView
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:id="@+id/icon_list_fragment_subtitle"
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <android.support.v7.widget.SwitchCompat
+            android:id="@+id/checkbox"
+            android:layout_marginLeft="@dimen/boilerplate_list_item_checkbox_horizontalMargin"
+            android:layout_marginRight="@dimen/boilerplate_list_item_checkbox_horizontalMargin"
+            android:layout_gravity="center_vertical|right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+</LinearLayout>

@@ -110,12 +110,14 @@ public class ScrollingToolbarLayout extends FrameLayout {
         if (getChildCount() == 3)
             paddingView = getChildAt(0);
         else
-            paddingView = getChildAt(getChildCount() -1);
+            paddingView = getChildAt(getChildCount() - 1);
         if (paddingView.getLayoutParams().height > 0) {
             extra = paddingView.getLayoutParams().height;
         }
         else {
-            paddingView.measure(MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE, MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE, MeasureSpec.AT_MOST));
+            // apparently this is the max size allowed
+            final int SIZE_MAX = 1073741823;
+            paddingView.measure(MeasureSpec.makeMeasureSpec(SIZE_MAX, MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(SIZE_MAX, MeasureSpec.AT_MOST));
             extra = paddingView.getMeasuredHeight();
         }
 

@@ -21,7 +21,7 @@ public class SimpleListTwoLineItem extends SimpleListOneLineItem {
 
     public SimpleListTwoLineItem subtitle(CharSequence subtitle) {
         this.subtitle = subtitle;
-        adapter.notifyDataSetChanged();
+        notifyDataSetChanged();
         return this;
     }
 
@@ -33,7 +33,9 @@ public class SimpleListTwoLineItem extends SimpleListOneLineItem {
     @Override
     protected void bindView(View v) {
         super.bindView(v);
-        ((TextView)v.findViewById(R.id.icon_list_fragment_subtitle)).setText(subtitle);
+        TextView tv = (TextView)v.findViewById(R.id.icon_list_fragment_subtitle);
+        tv.setText(subtitle);
+        tv.setVisibility(subtitle != null ? TextView.VISIBLE : TextView.GONE);
     }
 
     @Override
