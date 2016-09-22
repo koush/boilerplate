@@ -91,6 +91,10 @@ public class SimpleListFragmentAdapter extends RecyclerView.Adapter<SimpleListFr
         return items.get(i);
     }
 
+    public boolean hasItem(SimpleListItem item) {
+        return items.contains(item);
+    }
+
     protected void internalChanged() {
         if (sort != null)
             Collections.sort(items, sort);

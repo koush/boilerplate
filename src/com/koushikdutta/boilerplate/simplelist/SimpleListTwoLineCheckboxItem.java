@@ -1,5 +1,6 @@
 package com.koushikdutta.boilerplate.simplelist;
 
+import android.content.res.Resources;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +18,10 @@ public class SimpleListTwoLineCheckboxItem extends SimpleListCheckboxItem {
 
     public SimpleListTwoLineCheckboxItem(SimpleListFragment fragment) {
         this(fragment.getAdapter());
+    }
+
+    public SimpleListTwoLineCheckboxItem(Resources resources) {
+        super(resources);
     }
 
     public SimpleListTwoLineCheckboxItem subtitle(CharSequence subtitle) {

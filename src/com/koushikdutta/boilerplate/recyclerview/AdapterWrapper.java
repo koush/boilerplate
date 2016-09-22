@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.koushikdutta.boilerplate.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -21,6 +22,10 @@ public class AdapterWrapper extends RecyclerView.Adapter {
     // start at 1, 0 is header.
     int viewTypeMapCount = 1;
     Hashtable<Integer, WrappedAdapter> viewTypes = new Hashtable<Integer, WrappedAdapter>();
+
+    public Collection<WrappedAdapter> getAdapters() {
+        return viewTypes.values();
+    }
 
     private int nextEmptyViewType() {
         // empty views are always even view types
@@ -55,7 +60,7 @@ public class AdapterWrapper extends RecyclerView.Adapter {
     public class WrappedAdapter extends RecyclerView.AdapterDataObserver {
         String sectionHeader;
         View emptyView;
-        int emptyViewType;
+        int emptyViewType = -1;
 
         private boolean isShowingHeader() {
             return sectionHeader != null && adapter.getItemCount() > 0;
@@ -175,7 +180,7 @@ public class AdapterWrapper extends RecyclerView.Adapter {
                     return 0;
                 position--;
             }
-            if (position < info.adapter.getItemCount()) {
+            if (position < info.adapter.getItemCount() || (info.isShowingEmptyView() && position == 0)) {
                 final int viewType;
                 boolean isEmpty = info.isShowingEmptyView();
                 if (isEmpty)
@@ -234,7 +239,7 @@ public class AdapterWrapper extends RecyclerView.Adapter {
         }
         WrappedAdapter info = viewTypes.get(viewType);
         int unmappedViewType = info.unmappedViewTypes.get(viewType);
-        if (info.emptyViewType == viewType)
+        if (info.emptyViewType == unmappedViewType)
             return new EmptyViewHolder(info.emptyView);
         return info.adapter.onCreateViewHolder(parent, unmappedViewType);
     }
@@ -263,20 +268,6 @@ public class AdapterWrapper extends RecyclerView.Adapter {
         throw new RuntimeException("invalid position");
     }
 
-    private int getItemCount(boolean withEmptyView) {
-        int count = 0;
-        for (WrappedAdapter info: adapters) {
-            int adapterCount = info.adapter.getItemCount();
-            count += adapterCount;
-            // header check
-            if (info.isShowingHeader())
-                count++;
-            if (info.isShowingEmptyView())
-                count++;
-        }
-        return count;
-    }
-
     public boolean isEmptyView(int position) {
         return getItemViewType(position) % 2 == 0;
     }
@@ -291,6 +282,16 @@ public class AdapterWrapper extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return getItemCount(true);
+        int count = 0;
+        for (WrappedAdapter info: adapters) {
+            int adapterCount = info.adapter.getItemCount();
+            count += adapterCount;
+            // header check
+            if (info.isShowingHeader())
+                count++;
+            if (info.isShowingEmptyView())
+                count++;
+        }
+        return count;
     }
 }

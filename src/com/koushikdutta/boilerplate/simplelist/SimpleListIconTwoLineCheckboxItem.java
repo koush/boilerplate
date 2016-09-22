@@ -1,8 +1,8 @@
 package com.koushikdutta.boilerplate.simplelist;
 
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.widget.TextView;
 
 import com.koushikdutta.boilerplate.R;
 import com.koushikdutta.boilerplate.tint.TintedImageView;
@@ -20,6 +20,10 @@ public class SimpleListIconTwoLineCheckboxItem extends SimpleListTwoLineCheckbox
 
     public SimpleListIconTwoLineCheckboxItem(SimpleListFragment fragment) {
         this(fragment.getAdapter());
+    }
+
+    public SimpleListIconTwoLineCheckboxItem(Resources resources) {
+        super(resources);
     }
 
     public SimpleListIconTwoLineCheckboxItem icon(Drawable icon) {

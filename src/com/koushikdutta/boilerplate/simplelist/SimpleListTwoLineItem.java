@@ -1,5 +1,6 @@
 package com.koushikdutta.boilerplate.simplelist;
 
+import android.content.res.Resources;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +18,10 @@ public class SimpleListTwoLineItem extends SimpleListOneLineItem {
 
     public SimpleListTwoLineItem(SimpleListFragment fragment) {
         this(fragment.getAdapter());
+    }
+
+    public SimpleListTwoLineItem(Resources resources) {
+        super(resources);
     }
 
     public SimpleListTwoLineItem subtitle(CharSequence subtitle) {

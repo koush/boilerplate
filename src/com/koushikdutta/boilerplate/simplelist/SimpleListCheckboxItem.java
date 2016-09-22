@@ -1,5 +1,6 @@
 package com.koushikdutta.boilerplate.simplelist;
 
+import android.content.res.Resources;
 import android.view.View;
 import android.widget.CompoundButton;
 
@@ -17,6 +18,10 @@ public class SimpleListCheckboxItem extends SimpleListOneLineItem {
 
     public SimpleListCheckboxItem(SimpleListFragment fragment) {
         this(fragment.getAdapter());
+    }
+
+    public SimpleListCheckboxItem(Resources resources) {
+        super(resources);
     }
 
     public boolean checked() {
@@ -51,7 +56,7 @@ public class SimpleListCheckboxItem extends SimpleListOneLineItem {
         CompoundButton c = (CompoundButton)v.findViewById(R.id.checkbox);
         c.setOnCheckedChangeListener(null);
         c.setChecked(checked);
-        c.setVisibility(showCheck ? View.VISIBLE : View.INVISIBLE);
+        c.setVisibility(showCheck ? View.VISIBLE : View.GONE);
         c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
