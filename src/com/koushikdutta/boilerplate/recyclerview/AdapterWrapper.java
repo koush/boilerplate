@@ -62,8 +62,13 @@ public class AdapterWrapper extends RecyclerView.Adapter {
         View emptyView;
         int emptyViewType = -1;
 
+        boolean showHeader = true;
         private boolean isShowingHeader() {
-            return sectionHeader != null && adapter.getItemCount() > 0;
+            return showHeader && sectionHeader != null && adapter.getItemCount() > 0;
+        }
+
+        public void showHeader(boolean showHeader) {
+            this.showHeader = showHeader;
         }
 
         private boolean isShowingEmptyView() {
