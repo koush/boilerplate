@@ -69,6 +69,7 @@ public class AdapterWrapper extends RecyclerView.Adapter {
 
         public void showHeader(boolean showHeader) {
             this.showHeader = showHeader;
+            notifyDataSetChanged();
         }
 
         private boolean isShowingEmptyView() {
