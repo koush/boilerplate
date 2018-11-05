@@ -14,7 +14,7 @@
         </attr>
     </declare-styleable>
     <declare-styleable name="TintedProgressBar">
-        <attr name="tint" format="color|reference" />
+        <attr name="tintColor" format="color|reference" />
     </declare-styleable>
     <declare-styleable name="GridRecyclerView">
         <attr name="numColumns" format="integer" />

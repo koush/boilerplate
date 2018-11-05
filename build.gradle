@@ -1,9 +1,13 @@
 apply plugin: 'com.android.library'
 
 dependencies {
-    compile 'com.android.support:recyclerview-v7:+'
-    compile 'com.android.support:support-v4:+'
-    compile "com.android.support:appcompat-v7:+"
+    api 'com.android.support:recyclerview-v7:+'
+    api 'com.android.support:support-v4:+'
+    api "com.android.support:appcompat-v7:+"
+
+    api project(":AndroidAsync:AndroidAsync")
+
+    compileOnly 'com.google.android.gms:play-services-auth:16.0.1'
 }
 
 android {
