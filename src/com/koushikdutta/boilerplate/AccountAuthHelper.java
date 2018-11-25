@@ -19,10 +19,11 @@ import com.koushikdutta.async.future.SimpleFuture;
 @SuppressLint("MissingPermission")
 public class AccountAuthHelper {
 
-    public static Future<String> getGoogleSigninBackground(final Context context, String clientId) {
-        final SimpleFuture<String> ret = new SimpleFuture<>();
+    public static Future<UserToken> getGoogleSigninBackground(final Context context, String clientId) {
+        final SimpleFuture<UserToken> ret = new SimpleFuture<>();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestEmail()
         .requestIdToken(clientId)
         .requestId()
         .build();
@@ -32,7 +33,7 @@ public class AccountAuthHelper {
         client.silentSignIn()
         .addOnCompleteListener(task -> {
             try {
-                ret.setComplete(task.getResult(ApiException.class).getIdToken());
+                ret.setComplete(new UserToken(task.getResult(ApiException.class).getId(), task.getResult(ApiException.class).getEmail(), task.getResult(ApiException.class).getIdToken()));
             }
             catch (Exception e) {
                 ret.setComplete(e);
