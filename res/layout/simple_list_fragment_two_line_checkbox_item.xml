@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <android.support.v7.widget.SwitchCompat
+    <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/checkbox"
             android:layout_marginLeft="@dimen/boilerplate_list_item_checkbox_horizontalMargin"
             android:layout_marginRight="@dimen/boilerplate_list_item_checkbox_horizontalMargin"

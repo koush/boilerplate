@@ -2,12 +2,9 @@ package com.koushikdutta.boilerplate.recyclerview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
+
 import android.util.AttributeSet;
-import android.view.View;
-import android.widget.GridView;
 
 import com.koushikdutta.boilerplate.R;
 

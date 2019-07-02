@@ -1,11 +1,10 @@
 package com.koushikdutta.boilerplate.recyclerview;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 /**
  * Created by koush on 4/19/15.
