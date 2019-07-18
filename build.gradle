@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 dependencies {
     api 'androidx.recyclerview:recyclerview:1.0.0'
     api 'androidx.legacy:legacy-support-v4:1.0.0'
-    api 'androidx.appcompat:appcompat:1.0.0'
+    api 'androidx.appcompat:appcompat:1.0.2'
 
     api project(":AndroidAsync:AndroidAsync")
 
