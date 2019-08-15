@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -34,10 +35,14 @@ public class WindowChromeCompatActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            goFullscreenLayout();
-        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-            goTranslucentStatusBar();
+        // note that android P includes a cutout which may be of wonky height.
+        // no way to see what the icon_list_drawer_activity_statusbar_height value is outside of runtime
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                goFullscreenLayout();
+            else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                goTranslucentStatusBar();
+        }
     }
 
     int currentRequestCode = 0x00008000;
