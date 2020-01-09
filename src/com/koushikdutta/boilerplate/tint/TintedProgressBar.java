@@ -25,7 +25,7 @@ public class TintedProgressBar extends ProgressBar {
         TintHelper.getColorPrimary(getContext());
         int tintColor = TintHelper.getColorAccent(getContext());
         if (attrs != null) {
-            int color = attrs.getAttributeResourceValue("http://schemas.android.com/apk/res-auto", "tint", 0);
+            int color = attrs.getAttributeResourceValue("http://schemas.android.com/apk/res-auto", "tintColor", 0);
             if (color != 0)
                 tintColor = getContext().getResources().getColor(color);
         }
