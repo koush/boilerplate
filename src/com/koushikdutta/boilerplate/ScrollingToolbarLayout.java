@@ -101,8 +101,15 @@ public class ScrollingToolbarLayout extends FrameLayout {
     }
 
     boolean scrollOffEnabled;
-
     public void enableToolbarScrollOff(final IHeaderRecyclerView headerRecyclerView, final Fragment fragment) {
+        int statusBarColor = 0x9A000000;
+        if (Build.VERSION.SDK_INT >= 28) {
+            statusBarColor = colorPrimary;
+        }
+        enableToolbarScrollOff(headerRecyclerView, fragment, statusBarColor);
+    }
+
+    public void enableToolbarScrollOff(final IHeaderRecyclerView headerRecyclerView, final Fragment fragment, int statusBarColor) {
         scrollOffEnabled = true;
 
         int extra;
@@ -179,7 +186,7 @@ public class ScrollingToolbarLayout extends FrameLayout {
                     if (newBackdropHeight / (float) backdropHeight < .5f) {
                         toolbarFadeToPrimary();
                     } else {
-                        toolbarFadeToTranslucent();
+                        toolbarFadeToTranslucent(statusBarColor);
                     }
                 }
 
@@ -226,7 +233,7 @@ public class ScrollingToolbarLayout extends FrameLayout {
             }
         });
         if (getChildCount() == 3)
-            toolbarFadeToTranslucent();
+            toolbarFadeToTranslucent(statusBarColor);
     }
 
     boolean isPrimary = true;
@@ -292,13 +299,13 @@ public class ScrollingToolbarLayout extends FrameLayout {
             statusBarFadeToColor(colorPrimaryDark);
     }
 
-    void toolbarFadeToTranslucent() {
+    void toolbarFadeToTranslucent(int statusBarColor) {
         if (!isPrimary)
             return;
         toolbarFadeToColor(colorFaded);
         isPrimary = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            statusBarFadeToColor(0x9A000000);
+            statusBarFadeToColor(statusBarColor);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

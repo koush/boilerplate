@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.view.ContextThemeWrapper;
 import android.view.Window;
 
 /**
@@ -19,9 +20,12 @@ public final class WindowChromeUtils {
                 return currentAnimation;
             currentAnimation.cancel();
         }
-        if (!(context instanceof Activity))
+        Context baseContext = context;
+        if (!(context instanceof Activity) && context instanceof ContextThemeWrapper)
+            baseContext = ((ContextThemeWrapper) context).getBaseContext();
+        if (!(baseContext instanceof Activity))
             return null;
-        final Window window = ((Activity)context).getWindow();
+        final Window window = ((Activity)baseContext).getWindow();
         currentAnimation = ValueAnimator.ofArgb(window.getStatusBarColor(), color);
         currentAnimation.setDuration(context.getResources().getInteger(android.R.integer.config_longAnimTime));
         currentAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
