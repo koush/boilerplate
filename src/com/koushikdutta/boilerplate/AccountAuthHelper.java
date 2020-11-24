@@ -10,8 +10,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.koushikdutta.async.future.Future;
-import com.koushikdutta.async.future.SimpleFuture;
+import com.koushikdutta.scratch.Deferred;
+import com.koushikdutta.scratch.Promise;
 
 /**
  * Created by koush on 5/20/16.
@@ -19,8 +19,8 @@ import com.koushikdutta.async.future.SimpleFuture;
 @SuppressLint("MissingPermission")
 public class AccountAuthHelper {
 
-    public static Future<UserToken> getGoogleSigninBackground(final Context context, String clientId) {
-        final SimpleFuture<UserToken> ret = new SimpleFuture<>();
+    public static Promise<UserToken> getGoogleSigninBackground(final Context context, String clientId) {
+        final Deferred<UserToken> ret = new Deferred<>();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestEmail()
@@ -33,17 +33,17 @@ public class AccountAuthHelper {
         client.silentSignIn()
         .addOnCompleteListener(task -> {
             try {
-                ret.setComplete(new UserToken(task.getResult(ApiException.class).getId(), task.getResult(ApiException.class).getEmail(), task.getResult(ApiException.class).getIdToken()));
+                ret.resolve(new UserToken(task.getResult(ApiException.class).getId(), task.getResult(ApiException.class).getEmail(), task.getResult(ApiException.class).getIdToken()));
             }
             catch (Exception e) {
-                ret.setComplete(e);
+                ret.reject(e);
             }
         });
 
-        return ret;
+        return ret.getPromise();
     }
 
-    public static Future<UserToken> getGoogleSigninForeground(final WindowChromeCompatActivity activity, String clientId) {
+    public static Promise<UserToken> getGoogleSigninForeground(final WindowChromeCompatActivity activity, String clientId) {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestIdToken(clientId)
@@ -55,9 +55,9 @@ public class AccountAuthHelper {
         Intent intent = client.getSignInIntent();
 
         return activity.startActivityForResult(intent)
-        .thenConvert(from -> {
+        .next(from -> {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(from);
-            return new UserToken(task.getResult(ApiException.class).getId(), task.getResult(ApiException.class).getEmail(), task.getResult(ApiException.class).getIdToken());
+            return Promise.resolve(new UserToken(task.getResult(ApiException.class).getId(), task.getResult(ApiException.class).getEmail(), task.getResult(ApiException.class).getIdToken()));
         });
     }
 

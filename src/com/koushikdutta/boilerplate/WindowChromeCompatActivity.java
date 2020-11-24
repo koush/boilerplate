@@ -5,16 +5,17 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.koushikdutta.async.future.Future;
-import com.koushikdutta.async.future.SimpleFuture;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.koushikdutta.scratch.Deferred;
+import com.koushikdutta.scratch.Promise;
 
 import java.util.HashMap;
+import java.util.concurrent.CancellationException;
 
 /**
  * Created by koush on 6/3/16.
@@ -46,13 +47,13 @@ public class WindowChromeCompatActivity extends AppCompatActivity {
     }
 
     int currentRequestCode = 0x00008000;
-    HashMap<Integer, SimpleFuture<Intent>> callbacks = new HashMap<>();
-    public Future<Intent> startActivityForResult(Intent intent) {
+    HashMap<Integer, Deferred<Intent>> callbacks = new HashMap<>();
+    public Promise<Intent> startActivityForResult(Intent intent) {
         int requestCode = currentRequestCode++;
-        SimpleFuture<Intent> ret = new SimpleFuture<>();
+        Deferred<Intent> ret = new Deferred<>();
         callbacks.put(requestCode, ret);
         startActivityForResult(intent, requestCode);
-        return ret;
+        return ret.getPromise();
     }
 
     @Override
@@ -65,12 +66,12 @@ public class WindowChromeCompatActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        SimpleFuture<Intent> callback = callbacks.remove(requestCode);
+        Deferred<Intent> callback = callbacks.remove(requestCode);
         if (callback != null) {
             if (resultCode == RESULT_CANCELED || data == null)
-                callback.cancel();
+                callback.reject(new CancellationException());
             else
-                callback.setComplete(data);
+                callback.resolve(data);
         }
     }
 }
